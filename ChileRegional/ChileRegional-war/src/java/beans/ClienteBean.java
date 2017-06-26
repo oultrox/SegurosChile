@@ -207,7 +207,7 @@ public class ClienteBean implements Serializable {
         return clienteFacade.find(rut_cliente);
     }
     
-    public Vendedor buscarEsteFuncionario(){
+    public Vendedor buscarEsteVendedor(){
         return vendedorFacade.find(rut_vendedor);
     }
     
@@ -273,7 +273,7 @@ public class ClienteBean implements Serializable {
             Cliente c = new Cliente();
             c.setRutCliente(cliente.getRutCliente());
             c.setDvCliente(cliente.getDvCliente());
-            c.setClaveCliente(cliente.getClaveCliente());
+            c.setClaveCliente(Integer.parseInt(cliente.getRutCliente()) + Integer.parseInt("123"));
             c.setNombresCliente(cliente.getNombresCliente());
             c.setApellidoPatCliente(cliente.getApellidoPatCliente());
             c.setApellidoMatCliente(cliente.getApellidoMatCliente());
@@ -283,12 +283,12 @@ public class ClienteBean implements Serializable {
             c.setActividad(cliente.getActividad());
             c.setBeneficiario1Nombre(cliente.getBeneficiario1Nombre());
             c.setBeneficiario2Nombre(cliente.getBeneficiario2Nombre());
-            c.setVendedorIdVendedor(vendedorFacade.find(vendedor.getIdVendedor()));
+            c.setVendedorIdVendedor(vendedorFacade.find(vendedor.getIdVendedor() == 1));
             this.clienteFacade.create(c);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente ingresado al sistema correctamente"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Usted ha sido registrado en nuestro sistema correctamente"));
             return "index";            
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar Cliente", ""));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error, intente nuevamente", ""));
             return "index";
         }
 

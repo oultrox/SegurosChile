@@ -89,7 +89,7 @@ public class SupervisorBean implements Serializable {
         FacesMessage message = null;
         Supervisor s = supervisorFacade.find(rut_supervisor);
 
-        if (s != null && clave_supervisor == s.getClaveSupervisor()) {
+        if (s != null && clave_supervisor.equals(s.getClaveSupervisor())) {
             loggedIn = true;
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido Supervisor del Sistema", "");
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("supervisor", s);

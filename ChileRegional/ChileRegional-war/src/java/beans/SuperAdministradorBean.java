@@ -89,7 +89,7 @@ public class SuperAdministradorBean implements Serializable {
         FacesMessage message = null;
         SuperAdministrador a = superAdministradorFacade.find(rut_admin);
 
-        if (a != null && clave_admin == a.getClaveAdmin()) {
+        if (a != null && clave_admin.equals(a.getClaveAdmin())) {
             loggedIn = true;
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido Administrador del Sistema", "");
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("admin", a);

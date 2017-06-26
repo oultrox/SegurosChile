@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Registro Cliente</title>
+    </h:head>
+    <h:body style="background-image: url('../resources/images/fondo.jpg');">
+        <h:form id="form">
+            <p:messages id="mensaje" autoUpdate="false"/>
+                <p:panel id="Registrar" header="Registrar" style="margin-top: 20px ;height:500px; width: 450px;">
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <h:outputText value="Rut (Sin puntos)" />
+                        <p:inputText value="#{clienteBean.rut_cliente}" required="true" requiredMessage="Debe ingresar un rut" maxlength="8" onkeypress="return justNumbers(event);"/>
+                          -  
+                          <p:inputText value="#{clienteBean.dv_cliente}" required="true" requiredMessage="Debe ingresar un dígito verificador" maxlength="1" onkeypress="return dv(event);" style="width: 30"/>
+                        
+                        <h:outputText value="Nombre " />
+                        <p:inputText value="#{clienteBean.nombres_cliente}" required="true" requiredMessage="Debe ingresar un nombre" onkeypress="return letras(event);" maxlength="30"/>
+                        <h:outputText/>
+                        <h:outputText/>
+                        
+                        <h:outputText value="Apellido Paterno " />
+                        <p:inputText value="#{clienteBean.apellido_pat_cliente}" required="true" requiredMessage="Debe ingresar un apellido paterno" onkeypress="return letras(event);" maxlength="15"/>
+                        <h:outputText/>
+                        <h:outputText/>
+                        
+                        <h:outputText value="Apellido Materno " />
+                        <p:inputText value="#{clienteBean.apellido_mat_cliente}" required="true" requiredMessage="Debe ingresar un apellido materno" onkeypress="return letras(event);" maxlength="15"/>
+                        <h:outputText/>
+                        <h:outputText/>
+                        
+                        <h:outputText value="Dirección" />
+                        <p:inputText value="#{clienteBean.direccion_cliente}" required="true" requiredMessage="Debe ingresar una dirección" onkeypress="return letras(event);" maxlength="30"/>
+                        <h:outputText/>
+                        <h:outputText/>
+                        
+                        <h:outputText value="Teléfono" />
+                        <p:inputText value="#{clienteBean.telefono_cliente}" required="true" requiredMessage="Debe ingresar un teléfono" onkeypress="return justNumbers(event);" maxlength="11"/>
+                        <h:outputText/>
+                        <h:outputText/>
+                        
+                        <h:outputText value="Correo Electrónico " />
+                        <p:inputText value="#{clienteBean.correo_cliente}" required="true" requiredMessage="Debe ingresar un correo electrónico" validatorMessage="Formato de correo no válido" maxlength="30">
+                            <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]"  />
+                        </p:inputText>
+                        <h:outputText/>
+                        <h:outputText/>
+                        
+                        <h:outputText value="Actividad" />
+                        <p:inputText value="#{clienteBean.actividad_cliente}" required="true" requiredMessage="Debe ingresar una actividad" onkeypress="return letras(event);" maxlength="30"/>
+                        <h:outputText/>
+                        <h:outputText/>
+                        
+                        <h:outputText value="Nombre Beneficiario" />
+                        <p:inputText value="#{clienteBean.beneficiario1_nombre}" required="true" requiredMessage="Debe ingresar un beneficiario" onkeypress="return letras(event);" maxlength="30"/>
+                        <h:outputText/>
+                        <h:outputText/>
+                        
+                        <h:outputText value="Nombre Beneficiario 2" />
+                        <p:inputText value="#{clienteBean.beneficiario2_nombre}" required="true" requiredMessage="Debe ingresar un segundo Beneficiario" onkeypress="return letras(event);" maxlength="30"/>
+                        <h:outputText/>
+                        <h:outputText/>
+                        
+                        <Br/><Br/><Br/>
+                        <p:commandButton actionListener="#{clienteBean.crearCliente()}" value="Registrarse en el sistema" update="mensaje"/>
+                    </h:panelGrid>
+                </p:panel>
+
+
+        </h:form>
+        
+        <script type="text/javascript">
+            function justNumbers(e)
+            {
+                var keynum = window.event ? window.event.keyCode : e.which;
+                if (keynum == 8)
+                    return true;
+
+                return /\d/.test(String.fromCharCode(keynum));
+            }
+            
+            function dv(e)
+            {
+                var keynum = window.event ? window.event.keyCode : e.which;
+                if (keynum == 8 || keynum == 75 || keynum == 107)
+                    return true;
+
+                return /\d/.test(String.fromCharCode(keynum));
+            }
+
+            function letras(e)
+            {
+                var tecla = window.event ? window.event.keyCode : e.which;
+                if (tecla == 8)
+                    return true;
+
+                patron = /[A-Za-z\s]/; // 4
+                te = String.fromCharCode(tecla); // 5
+                return patron.test(te);
+
+            }
+
+        </script>
+
+
+        <h:outputScript name="js/spanishLocale.js" />
+    </h:body>
+</html>
+
