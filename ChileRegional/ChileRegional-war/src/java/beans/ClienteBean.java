@@ -96,12 +96,12 @@ public class ClienteBean implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cliente", c);
             FacesContext.getCurrentInstance().addMessage(null, message);
             context.addCallbackParam("loggedIn", loggedIn);
-            context.addCallbackParam("view", "faces/index.xhtml");
+            context.addCallbackParam("view", "faces/indexCliente.xhtml");
         } else {
             loggedIn = false;
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Rut o clave no válida");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            context.addCallbackParam("view", "faces/index.xhtml");
+            context.addCallbackParam("view", "faces/loginCliente.xhtml");
 
         }
     }
@@ -214,11 +214,15 @@ public class ClienteBean implements Serializable {
         if (pCliente != null) {
             this.cliente = pCliente;
             DefaultMenuItem item = new DefaultMenuItem("INICIO");
-            item.setOutcome("index");
+            item.setOutcome("indexCliente");
             menu.addElement(item);
 
-            item = new DefaultMenuItem("PEDIR SEGURO");
-            item.setOutcome("seguro");
+            item = new DefaultMenuItem("SOLICITAR SEGURO");
+            item.setOutcome("seleccionProductos");
+            menu.addElement(item);
+            
+            item = new DefaultMenuItem("CAMBIAR CONTRASEÑA");
+            item.setOutcome("cambioContrasenaCliente");
             menu.addElement(item);
 
         }

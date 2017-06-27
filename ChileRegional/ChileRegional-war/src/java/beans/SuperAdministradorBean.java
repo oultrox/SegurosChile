@@ -34,9 +34,6 @@ public class SuperAdministradorBean implements Serializable {
 
     @EJB
     private SuperAdministradorFacadeLocal superAdministradorFacade;
-
-    private String rut_admin;
-    private String clave_admin;
     private SuperAdministrador admin;
     boolean loggedIn = false;
     
@@ -52,22 +49,6 @@ public class SuperAdministradorBean implements Serializable {
         this.superAdministradorFacade = superAdministradorFacade;
     }
 
-    public String getRut_admin() {
-        return rut_admin;
-    }
-
-    public void setRut_admin(String rut_admin) {
-        this.rut_admin = rut_admin;
-    }
-
-    public String getClave_admin() {
-        return clave_admin;
-    }
-
-    public void setClave_adminr(String clave_admin) {
-        this.clave_admin = clave_admin;
-    }
-
     public SuperAdministrador getAdmin() {
         return admin;
     }
@@ -80,27 +61,24 @@ public class SuperAdministradorBean implements Serializable {
         return superAdministradorFacade.findAll();
     }
     
-    public SuperAdministrador getEsteCliente(){
-        return superAdministradorFacade.find(rut_admin);
-    }
     
     public void login(ActionEvent event) {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesMessage message = null;
-        SuperAdministrador a = superAdministradorFacade.find(rut_admin);
+        SuperAdministrador a = superAdministradorFacade.find(admin);
 
-        if (a != null && clave_admin.equals(a.getClaveAdmin())) {
+        if (a != null && admin.getClaveAdmin().equals(a.getClaveAdmin())) {
             loggedIn = true;
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido Administrador del Sistema", "");
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("admin", a);
             FacesContext.getCurrentInstance().addMessage(null, message);
             context.addCallbackParam("loggedIn", loggedIn);
-            context.addCallbackParam("view", "faces/index.xhtml");
+            context.addCallbackParam("view", "faces/indexAdmin.xhtml");
         } else {
             loggedIn = false;
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Rut o clave no válida");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            context.addCallbackParam("view", "faces/index.xhtml");
+            context.addCallbackParam("view", "faces/loginAdmin.xhtml");
             
         }
     }
@@ -153,20 +131,29 @@ public class SuperAdministradorBean implements Serializable {
         if (pAdmin != null) {
             this.admin = pAdmin;
             DefaultMenuItem item = new DefaultMenuItem("INICIO");
-            item.setOutcome("index");
+            item.setOutcome("indexAdmin");
             menu.addElement(item);
 
             item = new DefaultMenuItem("NUEVOS PRODUCTOS");
-            item.setOutcome("productos");
+            item.setOutcome("gestionProductos");
             menu.addElement(item);
             
             item = new DefaultMenuItem("GESTIONAR CLIENTES");
-            item.setOutcome("gestionClientes");
+            item.setOutcome("gestionarClientes");
             menu.addElement(item);
             
             item = new DefaultMenuItem("GESTIONAR SUPERVISORES");
             item.setOutcome("gestionSupervisores");
             menu.addElement(item);
+            
+            item = new DefaultMenuItem("GESTIONAR VENDEDORES");
+            item.setOutcome("gestionVendedores");
+            menu.addElement(item);
+            
+            item = new DefaultMenuItem("CAMBIAR CONTRASEÑA");
+            item.setOutcome("cambioContrasenaAdmin");
+            menu.addElement(item);
+            
 
         }
 

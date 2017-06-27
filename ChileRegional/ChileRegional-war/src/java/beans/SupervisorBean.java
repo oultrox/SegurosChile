@@ -34,9 +34,6 @@ public class SupervisorBean implements Serializable {
 
     @EJB
     private SupervisorFacadeLocal supervisorFacade;
-
-    private String rut_supervisor;
-    private String clave_supervisor;
     private Supervisor supervisor;
     boolean loggedIn = false;
     
@@ -52,21 +49,6 @@ public class SupervisorBean implements Serializable {
         this.supervisorFacade = supervisorFacade;
     }
 
-    public String getRut_supervisor() {
-        return rut_supervisor;
-    }
-
-    public void setRut_supervisor(String rut_supervisor) {
-        this.rut_supervisor = rut_supervisor;
-    }
-
-    public String getClave_supervisor() {
-        return clave_supervisor;
-    }
-
-    public void setClave_supervisor(String clave_supervisor) {
-        this.clave_supervisor = clave_supervisor;
-    }
 
     public Supervisor getSupervisor() {
         return supervisor;
@@ -80,27 +62,24 @@ public class SupervisorBean implements Serializable {
         return supervisorFacade.findAll();
     }
     
-    public Supervisor getEsteCliente(){
-        return supervisorFacade.find(rut_supervisor);
-    }
-    
+
     public void login(ActionEvent event) {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesMessage message = null;
-        Supervisor s = supervisorFacade.find(rut_supervisor);
+        Supervisor s = supervisorFacade.find(supervisor);
 
-        if (s != null && clave_supervisor.equals(s.getClaveSupervisor())) {
+        if (s != null && supervisor.getClaveSupervisor().equals(s.getClaveSupervisor())) {
             loggedIn = true;
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido Supervisor del Sistema", "");
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("supervisor", s);
             FacesContext.getCurrentInstance().addMessage(null, message);
             context.addCallbackParam("loggedIn", loggedIn);
-            context.addCallbackParam("view", "faces/index.xhtml");
+            context.addCallbackParam("view", "faces/indexSupervisor.xhtml");
         } else {
             loggedIn = false;
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Rut o clave no válida");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            context.addCallbackParam("view", "faces/index.xhtml");
+            context.addCallbackParam("view", "faces/loginSupervisor.xhtml");
             
         }
     }
@@ -157,7 +136,7 @@ public class SupervisorBean implements Serializable {
     }
     
     public String eliminarSupervisor(Supervisor supervisor) {
-        Supervisor s = supervisorFacade.find(supervisor.getIdSupervisor());
+        Supervisor s = supervisorFacade.find(supervisor.getRutSupervisor());
         supervisorFacade.remove(s);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Supervisor Eliminado!!!"));
         return "index";
@@ -165,7 +144,7 @@ public class SupervisorBean implements Serializable {
 
     
     public String actualizarContrasena() {
-        Supervisor s = supervisorFacade.find(supervisor.getIdSupervisor());
+        Supervisor s = supervisorFacade.find(supervisor.getRutSupervisor());
         s.setClaveSupervisor(supervisor.getClaveSupervisor());
         supervisorFacade.edit(s);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contraseña actualizada!!!"));
@@ -187,6 +166,10 @@ public class SupervisorBean implements Serializable {
 
             item = new DefaultMenuItem("VALIDAR SEGUROS");
             item.setOutcome("validarSeguros");
+            menu.addElement(item);
+            
+            item = new DefaultMenuItem("CAMBIAR CONTRASEÑA");
+            item.setOutcome("cambioContrasenaSupervisor");
             menu.addElement(item);
 
         }

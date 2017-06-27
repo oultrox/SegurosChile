@@ -22,10 +22,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import pojos.Cliente;
 import pojos.Producto;
-import pojos.Solicitud;
 import services.ClienteFacadeLocal;
 import services.ProductoFacadeLocal;
-import services.SolicitudFacadeLocal;
 
 /**
  *
