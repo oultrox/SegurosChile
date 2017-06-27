@@ -22,8 +22,13 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import pojos.Cliente;
 import pojos.Producto;
+import pojos.Vendedor;
 import services.ClienteFacadeLocal;
+import services.NombreproductoFacadeLocal;
+import services.PrecioFacadeLocal;
 import services.ProductoFacadeLocal;
+import services.VendedorFacadeLocal;
+
 
 /**
  *
@@ -37,47 +42,22 @@ public class ProductoBean implements Serializable {
     private ClienteFacadeLocal clienteFacade;
 
     @EJB
-    private SolicitudFacadeLocal solicitudFacade;
-
-    @EJB
     private ProductoFacadeLocal productoFacade;
 
-    private Solicitud solicitud;
+    @EJB
+    private NombreproductoFacadeLocal nomProdFacade;
+    
+    @EJB
+    private VendedorFacadeLocal vendedorFacade;
+
+    @EJB
+    private PrecioFacadeLocal precioFacade;
+
     private Producto producto;
     private Cliente cliente;
-    private int id_solicitud;
-    private int id_producto;
-    private String nombre_producto;
-    private String descripcion_producto;
-    private String estado;
 
     public ProductoBean() {
-        solicitud = new Solicitud();
         producto = new Producto();
-    }
-
-    public SolicitudFacadeLocal getSolicitudFacade() {
-        return solicitudFacade;
-    }
-
-    public void setSolicitudFacade(SolicitudFacadeLocal solicitudFacade) {
-        this.solicitudFacade = solicitudFacade;
-    }
-
-    public ProductoFacadeLocal getProductoFacade() {
-        return productoFacade;
-    }
-
-    public void setProductoFacade(ProductoFacadeLocal productoFacade) {
-        this.productoFacade = productoFacade;
-    }
-
-    public Solicitud getSolicitud() {
-        return solicitud;
-    }
-
-    public void setSolicitud(Solicitud solicitud) {
-        this.solicitud = solicitud;
     }
 
     public Producto getProducto() {
@@ -88,49 +68,19 @@ public class ProductoBean implements Serializable {
         this.producto = producto;
     }
 
-    public String getNombre_producto() {
-        return nombre_producto;
-    }
-
-    public void setNombre_producto(String nombre_producto) {
-        this.nombre_producto = nombre_producto;
-    }
-
-    public String getDescripcion_producto() {
-        return descripcion_producto;
-    }
-
-    public void setDescripcion_producto(String descripcion_producto) {
-        this.descripcion_producto = descripcion_producto;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
     public List<Producto> getProductos() {
         return productoFacade.findAll();
     }
 
-    public Producto getEsteProducto() {
-        return productoFacade.find(id_producto);
-    }
-
-    public Solicitud buscarEstaSolicitud() {
-        return solicitudFacade.find(id_solicitud);
-    }
-
     public String crearProducto() {
         try {
+            Cliente c = (Cliente) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("cliente");
             Producto p = new Producto();
-            p.setNombreProducto(producto.getNombreProducto());
-            p.setDescripcionProducto(producto.getDescripcionProducto());
+            p.setNombreProducto(nomProdFacade.find(producto.getNombreProducto()));
             p.setEstadoProducto("Pendiente");
-            p.setSolicitudIdSolicitud(solicitudFacade.find(solicitud.getIdSolicitud()));
+            p.setRutCliente(c);
+            p.setIdPrecio(precioFacade.find(producto.getIdPrecio()));
+            asignarVendedor(producto.getRutCliente());
             this.productoFacade.create(p);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto en espera de ser aprobado por un Supervisor"));
             return "seleccionProductos";
@@ -138,26 +88,39 @@ public class ProductoBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error, intente nuevamente", ""));
             return "seleccionProductos";
         }
-
+    }
+    
+    public void asignarVendedor(Cliente cliente){
+        Cliente c = clienteFacade.find(cliente);
+        List<Vendedor> listVendedores = vendedorFacade.findAll();
+        int random = (int) (Math.random() * listVendedores.size() + 1);
+        Vendedor v = listVendedores.get(random);
+        c.setRutVendedor(v.getRutVendedor());
+        clienteFacade.edit(c);
+        
     }
 
     public String eliminarProducto(Producto producto) {
-        Producto p = productoFacade.find(producto.getIdProducto());
-        productoFacade.remove(p);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Eliminado!!!"));
-        return "gestionProductos";
+        try {
+            Producto p = productoFacade.find(producto);
+            productoFacade.remove(p);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Eliminado!!!"));
+            return "gestionProductos";
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error, intente nuevamente", ""));
+            return "gestionProductos";
+        }
     }
 
     public String actualizarDatos() {
         Producto p = productoFacade.find(producto.getIdProducto());
         p.setNombreProducto(producto.getNombreProducto());
-        p.setDescripcionProducto(producto.getDescripcionProducto());
         productoFacade.edit(p);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto actualizado!!!"));
         return "gestionProductos";
     }
 
-    public String cambiarEstado() {
+    public String aprobarCompra() {
         Producto p = productoFacade.find(producto.getIdProducto());
         p.setEstadoProducto("Aprobado");
         productoFacade.edit(p);
@@ -184,19 +147,17 @@ public class ProductoBean implements Serializable {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(""));
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(clienteFacade.find(cliente.getIdCliente()).getCorreoCliente()));
+                    InternetAddress.parse(clienteFacade.find(cliente).getCorreoCliente()));
             message.setSubject("Su seguro de vida ha sido aprobado");
-            message.setText("Estimado " + clienteFacade.find(cliente.getIdCliente()).getNombresCliente() + " " + clienteFacade.find(cliente.getIdCliente()).getApellidoPatCliente() + "\n"
+            message.setText("Estimado " + clienteFacade.find(cliente).getNombresCliente() + " " + clienteFacade.find(cliente).getApellidoPatCliente() + "\n"
                     + "Se le comunica que su transacción para solicitar un seguro de vida en nuestra compañia ha sido aceptada" + "\n" + "\n"
                     + "Atte" + "\n"
                     + "Chile Regional");
 
             Transport.send(message);
         } catch (MessagingException e) {
-            throw new RuntimeException(e);    
- 
+            throw new RuntimeException(e);
         }
-
         return "aprobarProductos";
     }
 

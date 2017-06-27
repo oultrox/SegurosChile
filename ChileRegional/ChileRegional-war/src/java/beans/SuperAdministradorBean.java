@@ -119,7 +119,20 @@ public class SuperAdministradorBean implements Serializable {
         }
     }
     
-    
+    public String actualizarContrasena() {
+        SuperAdministrador s = (SuperAdministrador) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("admin");
+        s = superAdministradorFacade.find(s);
+        if (s.getClaveAdmin()== admin.getClaveAdmin()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "No debe usar la contraseña antigua", ""));
+            return "cambioContrasenaAdmin";
+        } else {
+            s.setClaveAdmin(admin.getClaveAdmin());
+            superAdministradorFacade.edit(s);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Su contraseña ha sido modificada"));
+            cerrarSesion();
+            return "loginAdmin";
+        }
+    }
     
     //Generar menu
     

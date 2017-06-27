@@ -12,7 +12,7 @@ import pojos.Cliente;
 
 /**
  *
- * @author Sebastian
+ * @author Pelao
  */
 @Stateless
 public class ClienteFacade extends AbstractFacade<Cliente> implements ClienteFacadeLocal {

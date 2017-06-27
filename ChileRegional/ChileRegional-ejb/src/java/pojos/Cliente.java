@@ -6,24 +6,20 @@
 package pojos;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Sebastian
+ * @author Pelao
  */
 @Entity
 @Table(name = "cliente")
@@ -104,12 +100,8 @@ public class Cliente implements Serializable {
     @Size(min = 1, max = 30)
     @Column(name = "beneficiario2_nombre")
     private String beneficiario2Nombre;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "rut_vendedor")
-    private int rutVendedor;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutCliente")
-    private List<Producto> productoList;
+    private Integer rutVendedor;
 
     public Cliente() {
     }
@@ -118,7 +110,7 @@ public class Cliente implements Serializable {
         this.rutCliente = rutCliente;
     }
 
-    public Cliente(Integer rutCliente, String dvCliente, int claveCliente, String nombresCliente, String apellidoPatCliente, String apellidoMatCliente, String direccionCliente, int telefonoCliente, String correoCliente, String actividad, String beneficiario1Nombre, String beneficiario2Nombre, int rutVendedor) {
+    public Cliente(Integer rutCliente, String dvCliente, int claveCliente, String nombresCliente, String apellidoPatCliente, String apellidoMatCliente, String direccionCliente, int telefonoCliente, String correoCliente, String actividad, String beneficiario1Nombre, String beneficiario2Nombre) {
         this.rutCliente = rutCliente;
         this.dvCliente = dvCliente;
         this.claveCliente = claveCliente;
@@ -131,7 +123,6 @@ public class Cliente implements Serializable {
         this.actividad = actividad;
         this.beneficiario1Nombre = beneficiario1Nombre;
         this.beneficiario2Nombre = beneficiario2Nombre;
-        this.rutVendedor = rutVendedor;
     }
 
     public Integer getRutCliente() {
@@ -230,21 +221,12 @@ public class Cliente implements Serializable {
         this.beneficiario2Nombre = beneficiario2Nombre;
     }
 
-    public int getRutVendedor() {
+    public Integer getRutVendedor() {
         return rutVendedor;
     }
 
-    public void setRutVendedor(int rutVendedor) {
+    public void setRutVendedor(Integer rutVendedor) {
         this.rutVendedor = rutVendedor;
-    }
-
-    @XmlTransient
-    public List<Producto> getProductoList() {
-        return productoList;
-    }
-
-    public void setProductoList(List<Producto> productoList) {
-        this.productoList = productoList;
     }
 
     @Override

@@ -144,11 +144,18 @@ public class SupervisorBean implements Serializable {
 
     
     public String actualizarContrasena() {
-        Supervisor s = supervisorFacade.find(supervisor.getRutSupervisor());
-        s.setClaveSupervisor(supervisor.getClaveSupervisor());
-        supervisorFacade.edit(s);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contraseña actualizada!!!"));
-        return "index";
+        Supervisor s = (Supervisor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("supervisor");
+        s = supervisorFacade.find(s);
+        if (s.getClaveSupervisor()== supervisor.getClaveSupervisor()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "No debe usar la contraseña antigua", ""));
+            return "cambioContrasenaSupervisor";
+        } else {
+            s.setClaveSupervisor(supervisor.getClaveSupervisor());
+            supervisorFacade.edit(s);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Su contraseña ha sido modificada"));
+            cerrarSesion();
+            return "loginSupervisor";
+        }
     }
     
     //Generar menu

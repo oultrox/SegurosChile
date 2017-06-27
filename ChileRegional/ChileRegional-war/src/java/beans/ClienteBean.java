@@ -146,7 +146,7 @@ public class ClienteBean implements Serializable {
             Cliente c = new Cliente();
             c.setRutCliente(cliente.getRutCliente());
             c.setDvCliente(cliente.getDvCliente());
-            c.setClaveCliente(cliente.getRutCliente() + Integer.parseInt("123"));
+            c.setClaveCliente(Integer.parseInt(cliente.getRutCliente().toString() + "123"));
             c.setNombresCliente(cliente.getNombresCliente());
             c.setApellidoPatCliente(cliente.getApellidoPatCliente());
             c.setApellidoMatCliente(cliente.getApellidoMatCliente());
@@ -156,7 +156,6 @@ public class ClienteBean implements Serializable {
             c.setActividad(cliente.getActividad());
             c.setBeneficiario1Nombre(cliente.getBeneficiario1Nombre());
             c.setBeneficiario2Nombre(cliente.getBeneficiario2Nombre());
-            c.setRutVendedor(vendedorFacade.find(vendedor).getRutVendedor());
             this.clienteFacade.create(c);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Se le ha enviado un correo electrónico con su clave para entrar al sistema"));
             return "loginCliente";
@@ -167,18 +166,12 @@ public class ClienteBean implements Serializable {
 
     }
 
-    public String eliminarCliente() {
+    public String eliminarCliente(Cliente cliente) {
         try {
             Cliente c = clienteFacade.find(cliente);
-            if(c != null){
-                clienteFacade.remove(c);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente Eliminado!!!"));
-                return "gestionarClientes";
-            }else{
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error, Ese cliente no existe en la base de datos", ""));
-                return "gestionarClientes";
-            }
-            
+            clienteFacade.remove(c);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente Eliminado!!!"));
+            return "gestionarClientes";
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error, intente nuevamente", ""));
             return "gestionarClientes";
@@ -198,11 +191,18 @@ public class ClienteBean implements Serializable {
     }
 
     public String actualizarContrasena() {
-        Cliente c = clienteFacade.find(cliente);
-        c.setClaveCliente(cliente.getClaveCliente());
-        clienteFacade.edit(c);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Su contraseña ha sido modificada"));
-        return "loginCliente";
+        Cliente c = (Cliente) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("cliente");
+        c = clienteFacade.find(c);
+        if (c.getClaveCliente() == cliente.getClaveCliente()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "No debe usar la contraseña antigua", ""));
+            return "cambioContrasenaCliente";
+        } else {
+            c.setClaveCliente(cliente.getClaveCliente());
+            clienteFacade.edit(c);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Su contraseña ha sido modificada"));
+            cerrarSesion();
+            return "loginCliente";
+        }
     }
 
     //Generar menu
