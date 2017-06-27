@@ -11,12 +11,12 @@
     <h:body style="background-image: url('../resources/images/fondo.jpg');">
         <h:form id="form">
             <p:messages id="mensaje" autoUpdate="false"/>
-                <p:panel id="Registrar" header="Registrar" style="margin-top: 20px ;height:500px; width: 450px;">
+                <p:panel id="Registrar" header="Registrar" style="margin-top: 20px ;height:650px; width: 600px;">
                     <h:panelGrid columns="4" cellpadding="5">
                         <h:outputText value="Rut (Sin puntos)" />
                         <p:inputText value="#{clienteBean.rut_cliente}" required="true" requiredMessage="Debe ingresar un rut" maxlength="8" onkeypress="return justNumbers(event);"/>
                           -  
-                          <p:inputText value="#{clienteBean.dv_cliente}" required="true" requiredMessage="Debe ingresar un dígito verificador" maxlength="1" onkeypress="return dv(event);" style="width: 30"/>
+                          <p:inputText value="#{clienteBean.dv_cliente}" required="true" requiredMessage="Debe ingresar un dígito verificador" maxlength="1" onkeypress="return dv(event);" style="width: 30px"/>
                         
                         <h:outputText value="Nombre " />
                         <p:inputText value="#{clienteBean.nombres_cliente}" required="true" requiredMessage="Debe ingresar un nombre" onkeypress="return letras(event);" maxlength="30"/>
@@ -34,7 +34,7 @@
                         <h:outputText/>
                         
                         <h:outputText value="Dirección" />
-                        <p:inputText value="#{clienteBean.direccion_cliente}" required="true" requiredMessage="Debe ingresar una dirección" onkeypress="return letras(event);" maxlength="30"/>
+                        <p:inputText value="#{clienteBean.direccion_cliente}" required="true" requiredMessage="Debe ingresar una dirección" onkeypress="return direccion(event);" maxlength="30"/>
                         <h:outputText/>
                         <h:outputText/>
                         
@@ -66,7 +66,7 @@
                         <h:outputText/>
                         
                         <Br/><Br/><Br/>
-                        <p:commandButton actionListener="#{clienteBean.crearCliente()}" value="Registrarse en el sistema" update="mensaje"/>
+                        <p:commandButton actionListener="#{clienteBean.crearCliente()}" value="Registrarse" update="mensaje" ajax="false"/>
                     </h:panelGrid>
                 </p:panel>
 
@@ -95,10 +95,22 @@
             function letras(e)
             {
                 var tecla = window.event ? window.event.keyCode : e.which;
-                if (tecla == 8)
+                if (tecla == 8 || tecla == 164 || tecla == 165)
                     return true;
 
-                patron = /[A-Za-z\s]/; // 4
+                patron = /^[a-zA-z\s\ñ\Ñ]+$/; // 4
+                te = String.fromCharCode(tecla); // 5
+                return patron.test(te);
+
+            }
+            
+            function direccion(e)
+            {
+                var tecla = window.event ? window.event.keyCode : e.which;
+                if (tecla == 8 || tecla == 164 || tecla == 165 || tecla == 35)
+                    return true;
+
+                patron = /^[a-zA-z\s\ñ\Ñ]+$/; // 4
                 te = String.fromCharCode(tecla); // 5
                 return patron.test(te);
 

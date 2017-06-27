@@ -141,36 +141,7 @@ public class SuperAdministradorBean implements Serializable {
         }
     }
     
-    public String crearAdmin() {
-        try {
-            SuperAdministrador a = new SuperAdministrador();
-            a.setRutAdmin(admin.getRutAdmin());
-            a.setClaveAdmin(admin.getClaveAdmin());
-            this.superAdministradorFacade.create(a);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Administrador ingresado al sistema correctamente"));
-            return "index";            
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar Administrador", ""));
-            return "index";
-        }
-
-    }
     
-    public String eliminarSupervisor(SuperAdministrador admin) {
-        SuperAdministrador a = superAdministradorFacade.find(admin.getIdAdmin());
-        superAdministradorFacade.remove(a);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Administrador Eliminado!!!"));
-        return "index";
-    }
-
-    
-    public String actualizarContrasena() {
-        SuperAdministrador a = superAdministradorFacade.find(admin.getIdAdmin());
-        a.setClaveAdmin(admin.getClaveAdmin());
-        superAdministradorFacade.edit(a);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contraseña actualizada!!!"));
-        return "index";
-    }
     
     //Generar menu
     

@@ -135,10 +135,10 @@ public class ProductoBean implements Serializable {
             p.setSolicitudIdSolicitud(solicitudFacade.find(solicitud.getIdSolicitud()));
             this.productoFacade.create(p);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto en espera de ser aprobado por un Supervisor"));
-            return "gestionProductos";
+            return "seleccionProductos";
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error, intente nuevamente", ""));
-            return "gestionProductos";
+            return "seleccionProductos";
         }
 
     }
@@ -165,8 +165,8 @@ public class ProductoBean implements Serializable {
         productoFacade.edit(p);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto/s Aprobados!!!"));
 
-        final String username = "";
-        final String password = "";
+        final String username = "soportechileregional@gmail.com";
+        final String password = "12345678.";
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");

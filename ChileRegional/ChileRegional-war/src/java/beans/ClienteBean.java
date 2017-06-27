@@ -285,11 +285,11 @@ public class ClienteBean implements Serializable {
             c.setBeneficiario2Nombre(cliente.getBeneficiario2Nombre());
             c.setVendedorIdVendedor(vendedorFacade.find(vendedor.getIdVendedor() == 1));
             this.clienteFacade.create(c);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Usted ha sido registrado en nuestro sistema correctamente"));
-            return "index";            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Se le ha enviado un correo electrónico con su clave para entrar al sistema"));
+            return "loginCliente";            
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error, intente nuevamente", ""));
-            return "index";
+            return "registrarCliente";
         }
 
     }
@@ -298,7 +298,7 @@ public class ClienteBean implements Serializable {
         Cliente c = clienteFacade.find(cliente.getIdCliente());
         clienteFacade.remove(c);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente Eliminado!!!"));
-        return "index";
+        return "gestionarClientes";
     }
 
     public String actualizarDatos() {
@@ -309,15 +309,15 @@ public class ClienteBean implements Serializable {
         c.setActividad(cliente.getActividad());
         clienteFacade.edit(c);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente actualizado!!!"));
-        return "index";
+        return "gestionarClientes";
     }
     
     public String actualizarContrasena() {
         Cliente c = clienteFacade.find(cliente.getIdCliente());
         c.setClaveCliente(cliente.getClaveCliente());
         clienteFacade.edit(c);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contraseña actualizada!!!"));
-        return "index";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Su contraseña ha sido modificada"));
+        return "loginCliente";
     }
     
     //Generar menu
