@@ -8,14 +8,14 @@ package services;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import pojos.SuperAdministrador;
+import pojos.Nombreproducto;
 
 /**
  *
  * @author Sebastian
  */
 @Stateless
-public class SuperAdministradorFacade extends AbstractFacade<SuperAdministrador> implements SuperAdministradorFacadeLocal {
+public class NombreproductoFacade extends AbstractFacade<Nombreproducto> implements NombreproductoFacadeLocal {
 
     @PersistenceContext(unitName = "jndiSeguro")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class SuperAdministradorFacade extends AbstractFacade<SuperAdministrador>
         return em;
     }
 
-    public SuperAdministradorFacade() {
-        super(SuperAdministrador.class);
+    public NombreproductoFacade() {
+        super(Nombreproducto.class);
     }
     
 }

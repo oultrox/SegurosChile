@@ -25,6 +25,7 @@
                             <p:commandButton class="btnn" style="color: #323133" value="Login" update="msgs" actionListener="#{clienteBean.login}"
                                              oncomplete="handleLoginRequest(xhr, status, args)"/>
                         </f:facet>
+                        <p:link outcome="registrarCliente?faces-redirect=true" value="Registrarse"/>
                     </h:panelGrid>
                 </p:panel>
 

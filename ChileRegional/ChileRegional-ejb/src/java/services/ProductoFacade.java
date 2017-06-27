@@ -12,7 +12,7 @@ import pojos.Producto;
 
 /**
  *
- * @author Pelao
+ * @author Sebastian
  */
 @Stateless
 public class ProductoFacade extends AbstractFacade<Producto> implements ProductoFacadeLocal {

@@ -7,26 +7,26 @@ package services;
 
 import java.util.List;
 import javax.ejb.Local;
-import pojos.Solicitud;
+import pojos.Precio;
 
 /**
  *
- * @author Pelao
+ * @author Sebastian
  */
 @Local
-public interface SolicitudFacadeLocal {
+public interface PrecioFacadeLocal {
 
-    void create(Solicitud solicitud);
+    void create(Precio precio);
 
-    void edit(Solicitud solicitud);
+    void edit(Precio precio);
 
-    void remove(Solicitud solicitud);
+    void remove(Precio precio);
 
-    Solicitud find(Object id);
+    Precio find(Object id);
 
-    List<Solicitud> findAll();
+    List<Precio> findAll();
 
-    List<Solicitud> findRange(int[] range);
+    List<Precio> findRange(int[] range);
 
     int count();
     

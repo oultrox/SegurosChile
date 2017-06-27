@@ -11,11 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -27,14 +23,13 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Pelao
+ * @author Sebastian
  */
 @Entity
 @Table(name = "cliente")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c"),
-    @NamedQuery(name = "Cliente.findByIdCliente", query = "SELECT c FROM Cliente c WHERE c.idCliente = :idCliente"),
     @NamedQuery(name = "Cliente.findByRutCliente", query = "SELECT c FROM Cliente c WHERE c.rutCliente = :rutCliente"),
     @NamedQuery(name = "Cliente.findByDvCliente", query = "SELECT c FROM Cliente c WHERE c.dvCliente = :dvCliente"),
     @NamedQuery(name = "Cliente.findByClaveCliente", query = "SELECT c FROM Cliente c WHERE c.claveCliente = :claveCliente"),
@@ -46,20 +41,16 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Cliente.findByCorreoCliente", query = "SELECT c FROM Cliente c WHERE c.correoCliente = :correoCliente"),
     @NamedQuery(name = "Cliente.findByActividad", query = "SELECT c FROM Cliente c WHERE c.actividad = :actividad"),
     @NamedQuery(name = "Cliente.findByBeneficiario1Nombre", query = "SELECT c FROM Cliente c WHERE c.beneficiario1Nombre = :beneficiario1Nombre"),
-    @NamedQuery(name = "Cliente.findByBeneficiario2Nombre", query = "SELECT c FROM Cliente c WHERE c.beneficiario2Nombre = :beneficiario2Nombre")})
+    @NamedQuery(name = "Cliente.findByBeneficiario2Nombre", query = "SELECT c FROM Cliente c WHERE c.beneficiario2Nombre = :beneficiario2Nombre"),
+    @NamedQuery(name = "Cliente.findByRutVendedor", query = "SELECT c FROM Cliente c WHERE c.rutVendedor = :rutVendedor")})
 public class Cliente implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_cliente")
-    private Integer idCliente;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 13)
     @Column(name = "rut_cliente")
-    private String rutCliente;
+    private Integer rutCliente;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 1)
@@ -113,21 +104,21 @@ public class Cliente implements Serializable {
     @Size(min = 1, max = 30)
     @Column(name = "beneficiario2_nombre")
     private String beneficiario2Nombre;
-    @JoinColumn(name = "vendedor_id_vendedor", referencedColumnName = "id_vendedor")
-    @ManyToOne(optional = false)
-    private Vendedor vendedorIdVendedor;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteIdCliente")
-    private List<Solicitud> solicitudList;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "rut_vendedor")
+    private int rutVendedor;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutCliente")
+    private List<Producto> productoList;
 
     public Cliente() {
     }
 
-    public Cliente(Integer idCliente) {
-        this.idCliente = idCliente;
+    public Cliente(Integer rutCliente) {
+        this.rutCliente = rutCliente;
     }
 
-    public Cliente(Integer idCliente, String rutCliente, String dvCliente, int claveCliente, String nombresCliente, String apellidoPatCliente, String apellidoMatCliente, String direccionCliente, int telefonoCliente, String correoCliente, String actividad, String beneficiario1Nombre, String beneficiario2Nombre) {
-        this.idCliente = idCliente;
+    public Cliente(Integer rutCliente, String dvCliente, int claveCliente, String nombresCliente, String apellidoPatCliente, String apellidoMatCliente, String direccionCliente, int telefonoCliente, String correoCliente, String actividad, String beneficiario1Nombre, String beneficiario2Nombre, int rutVendedor) {
         this.rutCliente = rutCliente;
         this.dvCliente = dvCliente;
         this.claveCliente = claveCliente;
@@ -140,21 +131,14 @@ public class Cliente implements Serializable {
         this.actividad = actividad;
         this.beneficiario1Nombre = beneficiario1Nombre;
         this.beneficiario2Nombre = beneficiario2Nombre;
+        this.rutVendedor = rutVendedor;
     }
 
-    public Integer getIdCliente() {
-        return idCliente;
-    }
-
-    public void setIdCliente(Integer idCliente) {
-        this.idCliente = idCliente;
-    }
-
-    public String getRutCliente() {
+    public Integer getRutCliente() {
         return rutCliente;
     }
 
-    public void setRutCliente(String rutCliente) {
+    public void setRutCliente(Integer rutCliente) {
         this.rutCliente = rutCliente;
     }
 
@@ -246,27 +230,27 @@ public class Cliente implements Serializable {
         this.beneficiario2Nombre = beneficiario2Nombre;
     }
 
-    public Vendedor getVendedorIdVendedor() {
-        return vendedorIdVendedor;
+    public int getRutVendedor() {
+        return rutVendedor;
     }
 
-    public void setVendedorIdVendedor(Vendedor vendedorIdVendedor) {
-        this.vendedorIdVendedor = vendedorIdVendedor;
+    public void setRutVendedor(int rutVendedor) {
+        this.rutVendedor = rutVendedor;
     }
 
     @XmlTransient
-    public List<Solicitud> getSolicitudList() {
-        return solicitudList;
+    public List<Producto> getProductoList() {
+        return productoList;
     }
 
-    public void setSolicitudList(List<Solicitud> solicitudList) {
-        this.solicitudList = solicitudList;
+    public void setProductoList(List<Producto> productoList) {
+        this.productoList = productoList;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idCliente != null ? idCliente.hashCode() : 0);
+        hash += (rutCliente != null ? rutCliente.hashCode() : 0);
         return hash;
     }
 
@@ -277,7 +261,7 @@ public class Cliente implements Serializable {
             return false;
         }
         Cliente other = (Cliente) object;
-        if ((this.idCliente == null && other.idCliente != null) || (this.idCliente != null && !this.idCliente.equals(other.idCliente))) {
+        if ((this.rutCliente == null && other.rutCliente != null) || (this.rutCliente != null && !this.rutCliente.equals(other.rutCliente))) {
             return false;
         }
         return true;
@@ -285,7 +269,7 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-        return "pojos.Cliente[ idCliente=" + idCliente + " ]";
+        return "pojos.Cliente[ rutCliente=" + rutCliente + " ]";
     }
     
 }

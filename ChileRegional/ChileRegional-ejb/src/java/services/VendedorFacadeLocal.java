@@ -11,7 +11,7 @@ import pojos.Vendedor;
 
 /**
  *
- * @author Pelao
+ * @author Sebastian
  */
 @Local
 public interface VendedorFacadeLocal {

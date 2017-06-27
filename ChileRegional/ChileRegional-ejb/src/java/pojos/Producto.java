@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Pelao
+ * @author Sebastian
  */
 @Entity
 @Table(name = "producto")
@@ -31,8 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p"),
     @NamedQuery(name = "Producto.findByIdProducto", query = "SELECT p FROM Producto p WHERE p.idProducto = :idProducto"),
-    @NamedQuery(name = "Producto.findByNombreProducto", query = "SELECT p FROM Producto p WHERE p.nombreProducto = :nombreProducto"),
-    @NamedQuery(name = "Producto.findByDescripcionProducto", query = "SELECT p FROM Producto p WHERE p.descripcionProducto = :descripcionProducto"),
     @NamedQuery(name = "Producto.findByEstadoProducto", query = "SELECT p FROM Producto p WHERE p.estadoProducto = :estadoProducto")})
 public class Producto implements Serializable {
 
@@ -44,22 +42,18 @@ public class Producto implements Serializable {
     private Integer idProducto;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 30)
-    @Column(name = "nombre_producto")
-    private String nombreProducto;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "descripcion_producto")
-    private String descripcionProducto;
-    @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 15)
     @Column(name = "estado_producto")
     private String estadoProducto;
-    @JoinColumn(name = "solicitud_id_solicitud", referencedColumnName = "id_solicitud")
+    @JoinColumn(name = "rut_cliente", referencedColumnName = "rut_cliente")
     @ManyToOne(optional = false)
-    private Solicitud solicitudIdSolicitud;
+    private Cliente rutCliente;
+    @JoinColumn(name = "id_precio", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Precio idPrecio;
+    @JoinColumn(name = "nombre_producto", referencedColumnName = "nombre")
+    @ManyToOne(optional = false)
+    private Nombreproducto nombreProducto;
 
     public Producto() {
     }
@@ -68,10 +62,8 @@ public class Producto implements Serializable {
         this.idProducto = idProducto;
     }
 
-    public Producto(Integer idProducto, String nombreProducto, String descripcionProducto, String estadoProducto) {
+    public Producto(Integer idProducto, String estadoProducto) {
         this.idProducto = idProducto;
-        this.nombreProducto = nombreProducto;
-        this.descripcionProducto = descripcionProducto;
         this.estadoProducto = estadoProducto;
     }
 
@@ -83,22 +75,6 @@ public class Producto implements Serializable {
         this.idProducto = idProducto;
     }
 
-    public String getNombreProducto() {
-        return nombreProducto;
-    }
-
-    public void setNombreProducto(String nombreProducto) {
-        this.nombreProducto = nombreProducto;
-    }
-
-    public String getDescripcionProducto() {
-        return descripcionProducto;
-    }
-
-    public void setDescripcionProducto(String descripcionProducto) {
-        this.descripcionProducto = descripcionProducto;
-    }
-
     public String getEstadoProducto() {
         return estadoProducto;
     }
@@ -107,12 +83,28 @@ public class Producto implements Serializable {
         this.estadoProducto = estadoProducto;
     }
 
-    public Solicitud getSolicitudIdSolicitud() {
-        return solicitudIdSolicitud;
+    public Cliente getRutCliente() {
+        return rutCliente;
     }
 
-    public void setSolicitudIdSolicitud(Solicitud solicitudIdSolicitud) {
-        this.solicitudIdSolicitud = solicitudIdSolicitud;
+    public void setRutCliente(Cliente rutCliente) {
+        this.rutCliente = rutCliente;
+    }
+
+    public Precio getIdPrecio() {
+        return idPrecio;
+    }
+
+    public void setIdPrecio(Precio idPrecio) {
+        this.idPrecio = idPrecio;
+    }
+
+    public Nombreproducto getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(Nombreproducto nombreProducto) {
+        this.nombreProducto = nombreProducto;
     }
 
     @Override

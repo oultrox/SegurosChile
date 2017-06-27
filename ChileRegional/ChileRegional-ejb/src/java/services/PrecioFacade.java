@@ -8,14 +8,14 @@ package services;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import pojos.Solicitud;
+import pojos.Precio;
 
 /**
  *
- * @author Pelao
+ * @author Sebastian
  */
 @Stateless
-public class SolicitudFacade extends AbstractFacade<Solicitud> implements SolicitudFacadeLocal {
+public class PrecioFacade extends AbstractFacade<Precio> implements PrecioFacadeLocal {
 
     @PersistenceContext(unitName = "jndiSeguro")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
         return em;
     }
 
-    public SolicitudFacade() {
-        super(Solicitud.class);
+    public PrecioFacade() {
+        super(Precio.class);
     }
     
 }

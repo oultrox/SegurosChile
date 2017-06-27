@@ -11,7 +11,7 @@ import pojos.Cliente;
 
 /**
  *
- * @author Pelao
+ * @author Sebastian
  */
 @Local
 public interface ClienteFacadeLocal {

@@ -9,8 +9,6 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -21,29 +19,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Pelao
+ * @author Sebastian
  */
 @Entity
 @Table(name = "super_administrador")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "SuperAdministrador.findAll", query = "SELECT s FROM SuperAdministrador s"),
-    @NamedQuery(name = "SuperAdministrador.findByIdAdmin", query = "SELECT s FROM SuperAdministrador s WHERE s.idAdmin = :idAdmin"),
     @NamedQuery(name = "SuperAdministrador.findByRutAdmin", query = "SELECT s FROM SuperAdministrador s WHERE s.rutAdmin = :rutAdmin"),
     @NamedQuery(name = "SuperAdministrador.findByClaveAdmin", query = "SELECT s FROM SuperAdministrador s WHERE s.claveAdmin = :claveAdmin")})
 public class SuperAdministrador implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_admin")
-    private Integer idAdmin;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 16)
     @Column(name = "rut_admin")
-    private String rutAdmin;
+    private Integer rutAdmin;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 15)
@@ -53,29 +45,20 @@ public class SuperAdministrador implements Serializable {
     public SuperAdministrador() {
     }
 
-    public SuperAdministrador(Integer idAdmin) {
-        this.idAdmin = idAdmin;
+    public SuperAdministrador(Integer rutAdmin) {
+        this.rutAdmin = rutAdmin;
     }
 
-    public SuperAdministrador(Integer idAdmin, String rutAdmin, String claveAdmin) {
-        this.idAdmin = idAdmin;
+    public SuperAdministrador(Integer rutAdmin, String claveAdmin) {
         this.rutAdmin = rutAdmin;
         this.claveAdmin = claveAdmin;
     }
 
-    public Integer getIdAdmin() {
-        return idAdmin;
-    }
-
-    public void setIdAdmin(Integer idAdmin) {
-        this.idAdmin = idAdmin;
-    }
-
-    public String getRutAdmin() {
+    public Integer getRutAdmin() {
         return rutAdmin;
     }
 
-    public void setRutAdmin(String rutAdmin) {
+    public void setRutAdmin(Integer rutAdmin) {
         this.rutAdmin = rutAdmin;
     }
 
@@ -90,7 +73,7 @@ public class SuperAdministrador implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idAdmin != null ? idAdmin.hashCode() : 0);
+        hash += (rutAdmin != null ? rutAdmin.hashCode() : 0);
         return hash;
     }
 
@@ -101,7 +84,7 @@ public class SuperAdministrador implements Serializable {
             return false;
         }
         SuperAdministrador other = (SuperAdministrador) object;
-        if ((this.idAdmin == null && other.idAdmin != null) || (this.idAdmin != null && !this.idAdmin.equals(other.idAdmin))) {
+        if ((this.rutAdmin == null && other.rutAdmin != null) || (this.rutAdmin != null && !this.rutAdmin.equals(other.rutAdmin))) {
             return false;
         }
         return true;
@@ -109,7 +92,7 @@ public class SuperAdministrador implements Serializable {
 
     @Override
     public String toString() {
-        return "pojos.SuperAdministrador[ idAdmin=" + idAdmin + " ]";
+        return "pojos.SuperAdministrador[ rutAdmin=" + rutAdmin + " ]";
     }
     
 }

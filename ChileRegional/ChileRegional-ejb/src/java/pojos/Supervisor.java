@@ -9,8 +9,6 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -21,29 +19,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Pelao
+ * @author Sebastian
  */
 @Entity
 @Table(name = "supervisor")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Supervisor.findAll", query = "SELECT s FROM Supervisor s"),
-    @NamedQuery(name = "Supervisor.findByIdSupervisor", query = "SELECT s FROM Supervisor s WHERE s.idSupervisor = :idSupervisor"),
     @NamedQuery(name = "Supervisor.findByRutSupervisor", query = "SELECT s FROM Supervisor s WHERE s.rutSupervisor = :rutSupervisor"),
     @NamedQuery(name = "Supervisor.findByClaveSupervisor", query = "SELECT s FROM Supervisor s WHERE s.claveSupervisor = :claveSupervisor")})
 public class Supervisor implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_supervisor")
-    private Integer idSupervisor;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 16)
     @Column(name = "rut_supervisor")
-    private String rutSupervisor;
+    private Integer rutSupervisor;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 15)
@@ -53,29 +45,20 @@ public class Supervisor implements Serializable {
     public Supervisor() {
     }
 
-    public Supervisor(Integer idSupervisor) {
-        this.idSupervisor = idSupervisor;
+    public Supervisor(Integer rutSupervisor) {
+        this.rutSupervisor = rutSupervisor;
     }
 
-    public Supervisor(Integer idSupervisor, String rutSupervisor, String claveSupervisor) {
-        this.idSupervisor = idSupervisor;
+    public Supervisor(Integer rutSupervisor, String claveSupervisor) {
         this.rutSupervisor = rutSupervisor;
         this.claveSupervisor = claveSupervisor;
     }
 
-    public Integer getIdSupervisor() {
-        return idSupervisor;
-    }
-
-    public void setIdSupervisor(Integer idSupervisor) {
-        this.idSupervisor = idSupervisor;
-    }
-
-    public String getRutSupervisor() {
+    public Integer getRutSupervisor() {
         return rutSupervisor;
     }
 
-    public void setRutSupervisor(String rutSupervisor) {
+    public void setRutSupervisor(Integer rutSupervisor) {
         this.rutSupervisor = rutSupervisor;
     }
 
@@ -90,7 +73,7 @@ public class Supervisor implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idSupervisor != null ? idSupervisor.hashCode() : 0);
+        hash += (rutSupervisor != null ? rutSupervisor.hashCode() : 0);
         return hash;
     }
 
@@ -101,7 +84,7 @@ public class Supervisor implements Serializable {
             return false;
         }
         Supervisor other = (Supervisor) object;
-        if ((this.idSupervisor == null && other.idSupervisor != null) || (this.idSupervisor != null && !this.idSupervisor.equals(other.idSupervisor))) {
+        if ((this.rutSupervisor == null && other.rutSupervisor != null) || (this.rutSupervisor != null && !this.rutSupervisor.equals(other.rutSupervisor))) {
             return false;
         }
         return true;
@@ -109,7 +92,7 @@ public class Supervisor implements Serializable {
 
     @Override
     public String toString() {
-        return "pojos.Supervisor[ idSupervisor=" + idSupervisor + " ]";
+        return "pojos.Supervisor[ rutSupervisor=" + rutSupervisor + " ]";
     }
     
 }

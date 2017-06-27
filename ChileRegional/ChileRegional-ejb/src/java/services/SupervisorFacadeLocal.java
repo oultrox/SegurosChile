@@ -11,7 +11,7 @@ import pojos.Supervisor;
 
 /**
  *
- * @author Pelao
+ * @author Sebastian
  */
 @Local
 public interface SupervisorFacadeLocal {

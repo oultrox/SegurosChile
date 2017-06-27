@@ -12,7 +12,7 @@ import pojos.Supervisor;
 
 /**
  *
- * @author Pelao
+ * @author Sebastian
  */
 @Stateless
 public class SupervisorFacade extends AbstractFacade<Supervisor> implements SupervisorFacadeLocal {

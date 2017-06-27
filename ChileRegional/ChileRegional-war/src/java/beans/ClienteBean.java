@@ -39,27 +39,14 @@ public class ClienteBean implements Serializable {
 
     @EJB
     private ClienteFacadeLocal clienteFacade;
-    
+
     private Cliente cliente;
-    private String rut_cliente;
-    private String dv_cliente;
-    private int clave_cliente;
-    private String nombres_cliente;
-    private String apellido_pat_cliente;
-    private String apellido_mat_cliente;
-    private String direccion_cliente;
-    private int telefono_cliente;
-    private String correo_cliente;
-    private String actividad_cliente;
-    private String beneficiario1_nombre;
-    private String beneficiario2_nombre;
     private Vendedor vendedor;
-    private String rut_vendedor;
     boolean loggedIn = false;
-    
+
     public ClienteBean() {
         cliente = new Cliente();
-        vendedor = new Vendedor();     
+        vendedor = new Vendedor();
     }
 
     public VendedorFacadeLocal getVendedorFacade() {
@@ -86,111 +73,6 @@ public class ClienteBean implements Serializable {
         this.cliente = cliente;
     }
 
-    public String getRut_cliente() {
-        return rut_cliente;
-    }
-
-    public void setRut_cliente(String rut_cliente) {
-        this.rut_cliente = rut_cliente;
-    }
-
-    public String getDv_cliente() {
-        return dv_cliente;
-    }
-
-    public void setDv_cliente(String dv_cliente) {
-        this.dv_cliente = dv_cliente;
-    }
-
-    public int getClave_cliente() {
-        return clave_cliente;
-    }
-
-    public void setClave_cliente(int clave_cliente) {
-        this.clave_cliente = clave_cliente;
-    }
-
-    public String getNombres_cliente() {
-        return nombres_cliente;
-    }
-
-    public void setNombres_cliente(String nombres_cliente) {
-        this.nombres_cliente = nombres_cliente;
-    }
-
-    public String getApellido_pat_cliente() {
-        return apellido_pat_cliente;
-    }
-
-    public void setApellido_pat_cliente(String apellido_pat_cliente) {
-        this.apellido_pat_cliente = apellido_pat_cliente;
-    }
-
-    public String getApellido_mat_cliente() {
-        return apellido_mat_cliente;
-    }
-
-    public void setApellido_mat_cliente(String apellido_mat_cliente) {
-        this.apellido_mat_cliente = apellido_mat_cliente;
-    }
-
-    public String getDireccion_cliente() {
-        return direccion_cliente;
-    }
-
-    public void setDireccion_cliente(String direccion_cliente) {
-        this.direccion_cliente = direccion_cliente;
-    }
-
-    public int getTelefono_cliente() {
-        return telefono_cliente;
-    }
-
-    public void setTelefono_cliente(int telefono_cliente) {
-        this.telefono_cliente = telefono_cliente;
-    }
-
-    public String getCorreo_cliente() {
-        return correo_cliente;
-    }
-
-    public void setCorreo_cliente(String correo_cliente) {
-        this.correo_cliente = correo_cliente;
-    }
-
-    public String getActividad_cliente() {
-        return actividad_cliente;
-    }
-
-    public void setActividad_cliente(String actividad_cliente) {
-        this.actividad_cliente = actividad_cliente;
-    }
-
-    public String getBeneficiario1_nombre() {
-        return beneficiario1_nombre;
-    }
-
-    public void setBeneficiario1_nombre(String beneficiario1_nombre) {
-        this.beneficiario1_nombre = beneficiario1_nombre;
-    }
-
-    public String getBeneficiario2_nombre() {
-        return beneficiario2_nombre;
-    }
-
-    public String getRut_vendedor() {
-        return rut_vendedor;
-    }
-
-    public void setRut_vendedor(String rut_vendedor) {
-        this.rut_vendedor = rut_vendedor;
-    }
-
-    
-    public void setBeneficiario2_nombre(String beneficiario2_nombre) {
-        this.beneficiario2_nombre = beneficiario2_nombre;
-    }
-
     public Vendedor getVendedor() {
         return vendedor;
     }
@@ -198,25 +80,17 @@ public class ClienteBean implements Serializable {
     public void setVendedor(Vendedor vendedor) {
         this.vendedor = vendedor;
     }
-    
-    public List<Cliente> getClientes(){
+
+    public List<Cliente> getClientes() {
         return clienteFacade.findAll();
     }
-    
-    public Cliente getEsteCliente(){
-        return clienteFacade.find(rut_cliente);
-    }
-    
-    public Vendedor buscarEsteVendedor(){
-        return vendedorFacade.find(rut_vendedor);
-    }
-    
+
     public void login(ActionEvent event) {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesMessage message = null;
-        Cliente c = clienteFacade.find(rut_cliente);
+        Cliente c = clienteFacade.find(cliente);
 
-        if (c != null && clave_cliente == c.getClaveCliente()) {
+        if (c != null && cliente.getClaveCliente() == c.getClaveCliente()) {
             loggedIn = true;
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido", c.getNombresCliente() + " " + c.getApellidoPatCliente());
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cliente", c);
@@ -228,10 +102,10 @@ public class ClienteBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Rut o clave no válida");
             FacesContext.getCurrentInstance().addMessage(null, message);
             context.addCallbackParam("view", "faces/index.xhtml");
-            
+
         }
     }
-    
+
     public boolean verificarSesionMenu() {
         FacesContext context = FacesContext.getCurrentInstance();
         Cliente c1 = (Cliente) context.getExternalContext().getSessionMap().get("cliente");
@@ -242,7 +116,6 @@ public class ClienteBean implements Serializable {
         }
     }
 
-   
     public void verificarSesion() {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -267,13 +140,13 @@ public class ClienteBean implements Serializable {
             ex.printStackTrace();
         }
     }
-    
+
     public String crearCliente() {
         try {
             Cliente c = new Cliente();
             c.setRutCliente(cliente.getRutCliente());
             c.setDvCliente(cliente.getDvCliente());
-            c.setClaveCliente(Integer.parseInt(cliente.getRutCliente()) + Integer.parseInt("123"));
+            c.setClaveCliente(cliente.getRutCliente() + Integer.parseInt("123"));
             c.setNombresCliente(cliente.getNombresCliente());
             c.setApellidoPatCliente(cliente.getApellidoPatCliente());
             c.setApellidoMatCliente(cliente.getApellidoMatCliente());
@@ -283,26 +156,38 @@ public class ClienteBean implements Serializable {
             c.setActividad(cliente.getActividad());
             c.setBeneficiario1Nombre(cliente.getBeneficiario1Nombre());
             c.setBeneficiario2Nombre(cliente.getBeneficiario2Nombre());
-            c.setVendedorIdVendedor(vendedorFacade.find(vendedor.getIdVendedor() == 1));
+            c.setRutVendedor(vendedorFacade.find(vendedor).getRutVendedor());
             this.clienteFacade.create(c);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Se le ha enviado un correo electrónico con su clave para entrar al sistema"));
-            return "loginCliente";            
+            return "loginCliente";
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error, intente nuevamente", ""));
             return "registrarCliente";
         }
 
     }
-    
-    public String eliminarCliente(Cliente cliente) {
-        Cliente c = clienteFacade.find(cliente.getIdCliente());
-        clienteFacade.remove(c);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente Eliminado!!!"));
-        return "gestionarClientes";
+
+    public String eliminarCliente() {
+        try {
+            Cliente c = clienteFacade.find(cliente);
+            if(c != null){
+                clienteFacade.remove(c);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente Eliminado!!!"));
+                return "gestionarClientes";
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error, Ese cliente no existe en la base de datos", ""));
+                return "gestionarClientes";
+            }
+            
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error, intente nuevamente", ""));
+            return "gestionarClientes";
+        }
+
     }
 
     public String actualizarDatos() {
-        Cliente c = clienteFacade.find(cliente.getIdCliente());
+        Cliente c = clienteFacade.find(cliente);
         c.setDireccionCliente(cliente.getDireccionCliente());
         c.setTelefonoCliente(cliente.getTelefonoCliente());
         c.setCorreoCliente(cliente.getCorreoCliente());
@@ -311,19 +196,18 @@ public class ClienteBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente actualizado!!!"));
         return "gestionarClientes";
     }
-    
+
     public String actualizarContrasena() {
-        Cliente c = clienteFacade.find(cliente.getIdCliente());
+        Cliente c = clienteFacade.find(cliente);
         c.setClaveCliente(cliente.getClaveCliente());
         clienteFacade.edit(c);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Su contraseña ha sido modificada"));
         return "loginCliente";
     }
-    
+
     //Generar menu
-    
     private MenuModel menu;
-    
+
     public MenuModel generarMenu() {
         menu = new DefaultMenuModel();
         Cliente pCliente = (Cliente) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("cliente");
@@ -341,5 +225,5 @@ public class ClienteBean implements Serializable {
 
         return menu;
     }
-    
+
 }
