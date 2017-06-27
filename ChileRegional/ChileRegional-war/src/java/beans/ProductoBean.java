@@ -21,6 +21,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import pojos.Cliente;
+import pojos.Precio;
 import pojos.Producto;
 import pojos.Vendedor;
 import services.ClienteFacadeLocal;
@@ -70,6 +71,10 @@ public class ProductoBean implements Serializable {
 
     public List<Producto> getProductos() {
         return productoFacade.findAll();
+    }
+    
+    public List<Precio> getPrecios() {
+        return precioFacade.findAll();
     }
 
     public String crearProducto() {
