@@ -156,7 +156,6 @@ public class ClienteBean implements Serializable {
             c.setActividad(cliente.getActividad());
             c.setBeneficiario1Nombre(cliente.getBeneficiario1Nombre());
             c.setBeneficiario2Nombre(cliente.getBeneficiario2Nombre());
-            c.setRutVendedor(vendedorFacade.find(vendedor).getRutVendedor());
             this.clienteFacade.create(c);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Se le ha enviado un correo electrónico con su clave para entrar al sistema"));
             return "loginCliente";

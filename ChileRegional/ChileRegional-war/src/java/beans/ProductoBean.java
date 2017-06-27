@@ -22,10 +22,12 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import pojos.Cliente;
 import pojos.Producto;
+import pojos.Vendedor;
 import services.ClienteFacadeLocal;
 import services.NombreproductoFacadeLocal;
 import services.PrecioFacadeLocal;
 import services.ProductoFacadeLocal;
+import services.VendedorFacadeLocal;
 
 /**
  *
@@ -43,6 +45,9 @@ public class ProductoBean implements Serializable {
 
     @EJB
     private NombreproductoFacadeLocal nomProdFacade;
+    
+    @EJB
+    private VendedorFacadeLocal vendedorFacade;
 
     @EJB
     private PrecioFacadeLocal precioFacade;
@@ -74,6 +79,7 @@ public class ProductoBean implements Serializable {
             p.setEstadoProducto("Pendiente");
             p.setRutCliente(c);
             p.setIdPrecio(precioFacade.find(producto.getIdPrecio()));
+            asignarVendedor(producto.getRutCliente());
             this.productoFacade.create(p);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto en espera de ser aprobado por un Supervisor"));
             return "seleccionProductos";
@@ -81,6 +87,16 @@ public class ProductoBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error, intente nuevamente", ""));
             return "seleccionProductos";
         }
+    }
+    
+    public void asignarVendedor(Cliente cliente){
+        Cliente c = clienteFacade.find(cliente);
+        List<Vendedor> listVendedores = vendedorFacade.findAll();
+        int random = (int) (Math.random() * listVendedores.size() + 1);
+        Vendedor v = listVendedores.get(random);
+        c.setRutVendedor(v.getRutVendedor());
+        clienteFacade.edit(c);
+        
     }
 
     public String eliminarProducto(Producto producto) {
